@@ -8,3 +8,4 @@ pkg
 coverage
 rdoc
 .idea/
+Gemfile.lock
