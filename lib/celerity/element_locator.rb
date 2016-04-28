@@ -79,11 +79,13 @@ module Celerity
 
     def find_by_id(what)
       case what
-      when Regexp
+        when Regexp
         elements_by_tag_names.find { |elem| elem.getId =~ what }
-      when String
-        obj = @object.getElementById(what)
-        return obj if @tags.include?(obj.getTagName)
+        when String
+        obj = @object.page.getElementById(what)
+        unless obj.nil?
+          return obj if @tags.include?(obj.getTagName)
+        end
 
         $stderr.puts "warning: multiple elements with identical id? (#{what.inspect})" if $VERBOSE
         elements_by_tag_names.find { |elem| elem.getId == what }
@@ -94,7 +96,7 @@ module Celerity
 
     def find_by_xpath(what)
       what = ".#{what}" if what[0].chr == "/"
-      object = @object.getByXPath(what).to_a.first || return
+      object = @object.page.getByXPath(what).to_a.first || return
 
       return unless @idents.any? { |id| id.match?(object) }
 
