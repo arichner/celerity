@@ -131,7 +131,7 @@ module Celerity
     def close
       @page = nil
       @object = nil
-      @webclient.closeAllWindows
+      @webclient.close
       @viewer.close
     end
 
@@ -654,11 +654,11 @@ module Celerity
     #
 
     def javascript_exceptions=(bool)
-      @webclient.throwExceptionOnScriptError = bool
+      @webclient.getOptions.setThrowExceptionOnScriptError(bool)
     end
 
     def javascript_exceptions
-      @webclient.throwExceptionOnScriptError
+      @webclient.getOptions.isThrowExceptionOnScriptError
     end
 
     #
@@ -668,11 +668,11 @@ module Celerity
     #
 
     def status_code_exceptions=(bool)
-      @webclient.throwExceptionOnFailingStatusCode = bool
+      @webclient.getOptions.throwExceptionOnFailingStatusCode = bool
     end
 
     def status_code_exceptions
-      @webclient.throwExceptionOnFailingStatusCode
+      @webclient.getOptions.isThrowExceptionOnFailingStatusCode
     end
 
     #
@@ -682,11 +682,11 @@ module Celerity
     #
 
     def css=(bool)
-      @webclient.cssEnabled = bool
+      @webclient.getOptions.setCssEnabled(bool)
     end
 
     def css
-      @webclient.cssEnabled
+      @webclient.getOptions.isCssEnabled
     end
 
     def refresh_handler=(symbol)
@@ -711,7 +711,7 @@ module Celerity
     #
 
     def secure_ssl=(bool)
-      @webclient.useInsecureSSL = !bool
+      @webclient.getOptions.setUseInsecureSSL(!bool)
     end
 
     #
@@ -721,11 +721,11 @@ module Celerity
     #
 
     def javascript_enabled=(bool)
-      @webclient.setJavaScriptEnabled(bool)
+      @webclient.getOptions.setJavaScriptEnabled(bool)
     end
 
     def javascript_enabled
-      @webclient.isJavaScriptEnabled
+      @webclient.getOptions.isJavaScriptEnabled
     end
 
     #
@@ -831,18 +831,24 @@ module Celerity
       browser = (opts.delete(:browser) || :firefox3).to_sym
 
       browser_version = case browser
-                        when :firefox, :ff, :firefox3, :ff3 # default :firefox
-                          ::HtmlUnit::BrowserVersion::FIREFOX_3
-                        when :firefox_3_6, :ff36
-                          ::HtmlUnit::BrowserVersion::FIREFOX_3_6
-                        when :internet_explorer_6, :ie6
-                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER_6
-                        when :internet_explorer, :ie, :internet_explorer7, :internet_explorer_7, :ie7  # default :ie
-                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER_7
-                        when :internet_explorer_8, :ie8
-                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER_8
-                        else
-                          raise ArgumentError, "unknown browser: #{browser.inspect}"
+                          when :firefox, :ff, :firefox3, :ff3 # default :firefox
+                          ::HtmlUnit::BrowserVersion::FIREFOX_38
+                          when :firefox_3_6, :ff36
+                          ::HtmlUnit::BrowserVersion::FIREFOX_38
+                          when :internet_explorer_6, :ie6
+                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER
+                          when :internet_explorer, :ie, :internet_explorer7, :internet_explorer_7, :ie7  # default :ie
+                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER
+                          when :internet_explorer_8, :ie8
+                          ::HtmlUnit::BrowserVersion::INTERNET_EXPLORER
+                          when :chrome
+                            ::HtmlUnit::BrowserVersion::CHROME
+                          when :best
+                            ::HtmlUnit::BrowserVersion::BEST_SUPPORTED
+                          when :ie_edge
+                            ::HtmlUnit::BrowserVersion::EDGE
+                          else
+                            raise ArgumentError, "unknown browser: #{browser.inspect}"
                         end
 
       if ua = opts.delete(:user_agent)
