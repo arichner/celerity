@@ -4,7 +4,7 @@
 
 {<img src="http://travis-ci.org/arichner/celerity.png" />}[http://travis-ci.org/arichner/celerity]
 
-
+update to HTML unit
 == Description
 
 Celerity is a JRuby library for easy and fast functional test automation for web applications.
