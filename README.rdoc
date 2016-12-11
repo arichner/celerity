@@ -2,7 +2,7 @@
 
 * http://celerity.rubyforge.org/
 
-{<img src="http://travis-ci.org/jarib/celerity.png" />}[http://travis-ci.org/jarib/celerity]
+{<img src="http://travis-ci.org/arichner/celerity.png" />}[http://travis-ci.org/arichner/celerity]
 
 
 == Description
